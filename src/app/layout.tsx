@@ -5,6 +5,7 @@ import { Providers } from "./providers";
 import Navbar from "@/components/navbar";
 // import { getServerSession } from "next-auth";
 // import { authOptions } from "@/lib/auth";
+import { Analytics } from "@vercel/analytics/react"
 
 
 const geistSans = localFont({
@@ -41,6 +42,7 @@ export default async function RootLayout({
 
           <Navbar />
           {children}
+          <Analytics />
         </Providers>
       </body>
     </html>
