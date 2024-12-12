@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
+import { Prisma } from "@prisma/client";
 
 export async function POST(req: NextRequest) {
     try {
@@ -9,13 +10,14 @@ export async function POST(req: NextRequest) {
         const { author, title, tags, dateFrom, dateTo, sortBy } = filters;
 
         // Construct the query dynamically based on filters
-        const query: any = {
+        const query: Prisma.MPostFindManyArgs = {
             where: {},
             orderBy: [],
         };
 
         // Apply author filter
         if (author) {
+            query.where = query.where || {};
             query.where.author = {
                 name: {
                     contains: author,
@@ -26,6 +28,7 @@ export async function POST(req: NextRequest) {
 
         // Apply title filter
         if (title) {
+            query.where = query.where || {};
             query.where.title = {
                 contains: title,
                 mode: "insensitive",
@@ -34,37 +37,37 @@ export async function POST(req: NextRequest) {
 
         // Apply tags filter
         if (tags && tags.length > 0) {
+            query.where = query.where || {};
             query.where.tags = {
                 hasSome: tags.split(",").map((tag: string) => tag.trim()),
             };
         }
 
-        // Apply date range filter
-        if (dateFrom) {
-            query.where.createdAt = {
-                ...query.where.createdAt,
-                gte: new Date(dateFrom),
-            };
-        }
+        // Apply date filters
+        if (dateFrom || dateTo) {
+            query.where = query.where || {};
+            query.where.createdAt = {};
 
-        if (dateTo) {
-            query.where.createdAt = {
-                ...query.where.createdAt,
-                lte: new Date(dateTo),
-            };
+            if (dateFrom) {
+                query.where.createdAt.gte = new Date(dateFrom);
+            }
+
+            if (dateTo) {
+                query.where.createdAt.lte = new Date(dateTo);
+            }
         }
 
         // Apply sorting filter
         if (sortBy) {
             const [field, direction] = sortBy.split("-");
             if (field && direction) {
-                query.orderBy.push({
-                    [field === "bookmarks" ? "bookmars" : field]:
+                query.orderBy = [{
+                    [field === "bookmarks" ? "bookmarks" : field]:
                         direction === "high" ? "desc" : "asc",
-                });
+                }];
             }
         } else {
-            query.orderBy.push({ createdAt: "desc" }); // Default sort by createdAt descending
+            query.orderBy = [{ createdAt: "desc" }]; // Default sort by createdAt descending
         }
 
         // Fetch filtered posts
@@ -82,7 +85,7 @@ export async function POST(req: NextRequest) {
                     },
                 },
                 likes: true,
-                bookmars: true,
+                bookmarks: true,
             },
         });
 

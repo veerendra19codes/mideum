@@ -2,7 +2,7 @@
 
 import axios from "axios";
 import { useSession } from "next-auth/react";
-import React, { createContext, useContext, useState, ReactNode, useEffect } from "react";
+import React, { createContext, useContext, useState, ReactNode, useEffect, useCallback } from "react";
 
 // Define the shape of the user object
 interface UserProps {
@@ -11,6 +11,7 @@ interface UserProps {
   username?: string;
   bio?: string;
   image?: string;
+  email?: string;
 }
 
 // Define the context shape
@@ -37,7 +38,7 @@ export const UserContextProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<UserProps | null>(null);
   const session = useSession();
 
-  const fetchUserDetails = async () => {
+  const fetchUserDetails = useCallback(async () => {
     try {
       // console.log("called:");
       const res = await axios.get(`/api/profile/${session?.data?.user?.id}`)
@@ -47,11 +48,12 @@ export const UserContextProvider = ({ children }: { children: ReactNode }) => {
     } catch (error) {
       console.log("error in finding user details:", error);
     }
-  }
+  }, [session?.data?.user?.id]);
+
   useEffect(() => {
     // console.log("session:", session);
     if (session.data) fetchUserDetails();
-  }, [session.data])
+  }, [session.data, fetchUserDetails])
 
   return (
     <UserContext.Provider value={{ user, setUser, fetchUserDetails }}>

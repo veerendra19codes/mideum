@@ -25,20 +25,20 @@ model MPost {
   author    MUser        @relation(fields: [authorId], references: [id])
   authorId  Int
   likes     MLikes[]
-  bookmars  MBookmarks[]
+  bookmarks MBookmarks[]
 }
 
 model MUser {
-  id       Int          @id @default(autoincrement())
-  email    String       @unique
-  username String       @unique
-  name     String?
-  password String
-  bio      String?
-  image    String?
-  posts    MPost[]
-  likes    MLikes[]
-  bookmars MBookmarks[]
+  id        Int          @id @default(autoincrement())
+  email     String       @unique
+  username  String       @unique
+  name      String?
+  password  String
+  bio       String?
+  image     String?
+  posts     MPost[]
+  likes     MLikes[]
+  bookmarks MBookmarks[]
 }
 
 model MLikes {
