@@ -22,6 +22,7 @@ export function WriteBlogDialog() {
     const [title, setTitle] = useState('')
     const [content, setContent] = useState('')
     const { user, fetchUserDetails } = useUserContext();
+    console.log("open:", isOpen);
 
     const handlePublish = async () => {
         console.log("body:", title, content, user?.id);
@@ -58,7 +59,7 @@ export function WriteBlogDialog() {
     }
 
     return (
-        <Dialog open={isOpen} onOpenChange={setIsOpen}>
+        <Dialog open={isOpen} onOpenChange={(value) => setIsOpen(value)}>
             <DialogTrigger asChild>
                 <Button variant="ghost" size="icon" className="w-full text-start flex justify-start">
                     <svg
@@ -78,7 +79,7 @@ export function WriteBlogDialog() {
                     <span className="pl-[6px]">Write</span>
                 </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[625px]">
+            <DialogContent className="sm:max-w-[625px] z-[100000]">
                 <DialogHeader>
                     <DialogTitle>Write a new blog post</DialogTitle>
                     <DialogDescription>

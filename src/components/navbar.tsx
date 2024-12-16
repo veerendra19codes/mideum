@@ -17,15 +17,8 @@ import { signOut } from "next-auth/react";
 import { ModeToggle } from './theme-toggler'
 import { useUserContext } from '@/contexts/userContext'
 
-// interface SessionUserProps {
-//     id?: number,
-//     username?: string,
-//     email?: string
-// }
-
 export default function Navbar() {
-    // console.log("user in navbar:", user);
-    // const [isSearchFocused, setIsSearchFocused] = useState(false)
+
     const pathname = usePathname();
     // console.log("pathname:", pathname);
     const router = useRouter();
@@ -41,20 +34,6 @@ export default function Navbar() {
                     Mideum
                 </Link>
 
-                {/* Search Bar */}
-                {/* <div className="hidden md:block flex-grow max-w-xl mx-4">
-                    <div className="relative">
-                        <Search className={`absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 ${isSearchFocused ? 'text-primary' : 'text-muted-foreground'}`} />
-                        <Input
-                            type="search"
-                            placeholder="Search"
-                            className="w-full pl-10"
-                            onFocus={() => setIsSearchFocused(true)}
-                            onBlur={() => setIsSearchFocused(false)}
-                        />
-                    </div>
-                </div> */}
-
                 {user?.username ?
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
@@ -65,26 +44,26 @@ export default function Navbar() {
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" className="w-56">
-                            <DropdownMenuItem className="py-3" onClick={() => router.push(`/u/${user?.username}`)}>
+                            <DropdownMenuItem className="py-3 cursor-pointer" onClick={() => router.push(`/u/${user?.username}`)}>
                                 <User className="mr-2 h-4 w-4" />
                                 <span>Profile</span>
                             </DropdownMenuItem>
                             <DropdownMenuItem>
                                 <WriteBlogDialog />
                             </DropdownMenuItem>
-                            <DropdownMenuItem className="py-3" onClick={() => router.push(`/explore`)}>
+                            <DropdownMenuItem className="py-3 cursor-pointer" onClick={() => router.push(`/explore`)}>
                                 <Globe className="mr-2 h-4 w-4" />Explore
                             </DropdownMenuItem>
-                            <DropdownMenuItem className="py-3">
+                            <DropdownMenuItem className="py-3 cursor-pointer">
                                 <Bookmark className="mr-2 h-4 w-4" />Bookmarks
                             </DropdownMenuItem>
-                            <DropdownMenuItem className="py-3">
+                            <DropdownMenuItem className="py-3 cursor-pointer">
                                 <BellIcon className="mr-2 h-4 w-4" />Notifications
                             </DropdownMenuItem>
                             <ModeToggle />
 
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem className="py-3" onClick={() => signOut()}>
+                            <DropdownMenuItem className="py-3 cursor-pointer" onClick={() => signOut()}>
                                 Signout
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
@@ -95,7 +74,7 @@ export default function Navbar() {
                     </DropdownMenu>
                     :
                     <Link href={"/login"}>
-                        <Button variant={"default"} className="bg-purple-700 hover:bg-purple-600">
+                        <Button variant={"default"} className="bg-purple-700 hover:bg-purple-600 text-white">
                             Login
                         </Button>
                     </Link>

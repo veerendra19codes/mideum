@@ -2,22 +2,21 @@ import Image from 'next/image'
 
 const navigation = {
     connect: [
-        { name: 'Book Meeting', href: '' },
+
         {
             name: 'Twitter',
-            href: 'https://twitter.com/justansub',
+            href: 'https://x.com/Veerendra_198',
         },
         {
             name: 'Github',
-            href: 'https://www.youtube.com/@SpeedyBrand-SEO',
+            href: 'https://github.com/veerendra19codes',
         },
         {
             name: 'LinkedIn',
-            href: 'https://www.linkedin.com/company/speedy-brand-inc/',
+            href: 'https://in.linkedin.com/in/veerendragumate',
         },
     ],
     company: [
-        { name: 'Blogs', href: '/' },
         { name: 'Pricing', href: '/' },
         { name: 'Affiliate Partner', href: '/' },
         { name: 'AI For Enterprise', href: '/' },
@@ -28,7 +27,7 @@ export const Footer = () => {
     return (
         <footer
             aria-labelledby="footer-heading"
-            className="font-inter w-full max-w-7xl p-24"
+            className="font-inter w-full max-w-7xl p-4 md:px-24 md:pt-24"
         >
             <h2 id="footer-heading" className="sr-only">
                 Footer
@@ -36,7 +35,7 @@ export const Footer = () => {
             <div className="mx-auto max-w-7xl px-2">
                 <div className="flex flex-col justify-between lg:flex-row">
                     <div className="space-y-8">
-                        <Image
+                        {/* <Image
                             priority={true}
                             unoptimized={true}
                             width={100}
@@ -44,12 +43,12 @@ export const Footer = () => {
                             src="/images/syntaxUI.svg"
                             alt="logo"
                             className="h-7 w-auto"
-                        />
+                        /> */}
                         <p className="text-md max-w-xs leading-6 text-gray-700 dark:text-gray-300">
-                            Not your average component library - build faster, launch sooner.
+                            Read, Write and Share stories on any topic
                         </p>
                         <div className="flex space-x-6 text-sm text-gray-700  dark:text-gray-300">
-                            <div>Made with ❤️ by Ansub.</div>
+                            <div>Made with ❤️ by Veerendra.</div>
                         </div>
                     </div>
                     {/* Navigations */}
@@ -73,7 +72,7 @@ export const Footer = () => {
                                 ))}
                             </div>
                         </div>
-                        <div>
+                        {/* <div>
                             <div>
                                 <h3 className="text-sm font-semibold leading-6 text-gray-900 dark:text-gray-200">
                                     Company
@@ -91,12 +90,12 @@ export const Footer = () => {
                                     ))}
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
                 <div className="mt-16 border-t border-gray-900/10 pt-8 sm:mt-20 lg:mt-24 dark:border-gray-100/10">
                     <p className="text-xs leading-5 text-gray-700 dark:text-gray-300">
-                        &copy; 2024 SyntaxUI. All rights reserved.
+                        &copy; 2024 Mideum. All rights reserved.
                     </p>
                 </div>
             </div>

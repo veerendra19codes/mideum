@@ -3,8 +3,6 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { Providers } from "./providers";
 import Navbar from "@/components/navbar";
-// import { getServerSession } from "next-auth";
-// import { authOptions } from "@/lib/auth";
 import { Analytics } from "@vercel/analytics/react"
 
 
@@ -29,9 +27,6 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // const session = await getServerSession(authOptions);
-  // const user = session?.user || {};
-  // console.log("session:", session);
 
   return (
     <html lang="en">
@@ -39,7 +34,6 @@ export default async function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Providers>
-
           <Navbar />
           {children}
           <Analytics />

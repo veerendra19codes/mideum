@@ -17,7 +17,7 @@ const Loginpage = () => {
     }, [session.data, router])
 
     const [info, setInfo] = useState({ email: "", password: "" });
-    const [, setError] = useState("");
+    const [error, setError] = useState("");
     const [pending, setPending] = useState(false);
 
     const handleInput = (e: ChangeEvent<HTMLInputElement>) => {
@@ -58,13 +58,29 @@ const Loginpage = () => {
 
     return (
         <div className="w-full h-screen flex flex-col justify-center items-center gap-4">
-            Login Page
-            <form action="" className="w-full flex flex-col justify-center items-center gap-4" onSubmit={handleSubmit}>
-                <input name="email" type="email" placeholder="email" className="border-[1px] border-gray-500 rounded-xl py-1 pl-4" onChange={(e) => handleInput(e)} />
-                <input name="password" type="text" placeholder="password" className="border-[1px] border-gray-500 rounded-xl py-1 pl-4" onChange={(e) => handleInput(e)} />
-                <button type="submit" className="py-2 px-4 rounded-xl bg-blue-500 text-white" disabled={pending ? true : false}>{pending ? "Logging in" : "Login"}</button>
+
+            <form action="" className="flex flex-col justify-center items-center gap-4 p-8 bg-gray-800 rounded-xl" onSubmit={handleSubmit}>
+                <div className="flex flex-col gap-2 justify-center items-center mb-4">
+                    <h1 className="text-2xl font-bold">
+                        Login
+                    </h1>
+                    <h6>Enter details below to login</h6>
+                </div>
+                <input name="email" type="email" placeholder="email*" className="border-[1px] border-gray-500 rounded-xl py-2 pl-4" onChange={(e) => {
+                    handleInput(e);
+                    setError("");
+                }} />
+
+                <input name="password" type="text" placeholder="password*" className="border-[1px] border-gray-500 rounded-xl py-2 pl-4" onChange={(e) => {
+                    handleInput(e);
+                    setError("");
+                }} />
+
+                {error && <span className="error-message w-full text-center text-red-600">{error}</span>}
+
+                <button type="submit" className="py-2 px-4 rounded-xl bg-blue-500 text-white mt-4" disabled={pending ? true : false}>{pending ? "Logging in" : "Login"}</button>
+                <Link href="/register" >Don&apos;t have an Account? <span className="text-blue-500 hover:text-blue-400 hover:underline">Register</span></Link>
             </form>
-            <Link href="/register" >Don&apos;t have an Account? <span className="text-blue-500 hover:text-blue-400 hover:underline">Register</span></Link>
         </div>
     )
 }

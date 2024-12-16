@@ -5,6 +5,7 @@ import React from "react";
 import { Highlight } from "../ui/hero-highlight";
 import { ContainerScroll } from "../ui/container-scroll-animation";
 import Image from "next/image";
+import Link from "next/link";
 
 export function Hero() {
     return (
@@ -29,9 +30,9 @@ export function Hero() {
                             stories on any topic
                         </Highlight>
                     </div>
-                    <button className="bg-black dark:bg-white rounded-full w-fit text-white dark:text-black px-4 py-2">
+                    <Link href={"/explore"} className="bg-black dark:bg-white rounded-full w-fit text-white dark:text-black px-4 py-2">
                         Explore now
-                    </button>
+                    </Link>
                 </motion.div></>}>
                 <Image
                     src={`/hero.png`}
