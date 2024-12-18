@@ -20,12 +20,12 @@ export function ProfileNavbar() {
             >
                 Bookmarks
             </Button>
-            <Button
+            {/* <Button
                 variant={activeTab === 'collections' ? 'default' : 'ghost'}
                 onClick={() => setActiveTab('collections')}
             >
                 Collections
-            </Button>
+            </Button> */}
         </nav>
     )
 }

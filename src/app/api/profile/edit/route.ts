@@ -8,11 +8,11 @@ const prisma = new PrismaClient();
 export async function PUT(req: NextRequest) {
     try {
         const session = await getServerSession(authOptions);
-        console.log("session:", session);
+        // console.log("session:", session);
 
         const id = session?.user?.id || "";
         const { name, bio, image } = await req.json();
-        console.log("req.body:", name, bio, image);
+        // console.log("req.body:", name, bio, image);
 
         // upsert means it will create new entry if not present
         const updatedProfile = await prisma.mUser.update({

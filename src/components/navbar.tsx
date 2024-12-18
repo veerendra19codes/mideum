@@ -35,43 +35,43 @@ export default function Navbar() {
                 </Link>
 
                 {user?.username ?
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="icon" className="rounded-full">
-                                <Avatar>
-                                    <AvatarFallback>{user?.username[0].toUpperCase() || "U"}</AvatarFallback>
-                                </Avatar>
-                            </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="w-56">
-                            <DropdownMenuItem className="py-3 cursor-pointer" onClick={() => router.push(`/u/${user?.username}`)}>
-                                <User className="mr-2 h-4 w-4" />
-                                <span>Profile</span>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem>
-                                <WriteBlogDialog />
-                            </DropdownMenuItem>
-                            <DropdownMenuItem className="py-3 cursor-pointer" onClick={() => router.push(`/explore`)}>
-                                <Globe className="mr-2 h-4 w-4" />Explore
-                            </DropdownMenuItem>
-                            <DropdownMenuItem className="py-3 cursor-pointer">
-                                <Bookmark className="mr-2 h-4 w-4" />Bookmarks
-                            </DropdownMenuItem>
-                            <DropdownMenuItem className="py-3 cursor-pointer">
-                                <BellIcon className="mr-2 h-4 w-4" />Notifications
-                            </DropdownMenuItem>
-                            <ModeToggle />
+                    <div className="flex gap-4 justify-center items-center">
+                        <WriteBlogDialog label='write' />
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button variant="ghost" size="icon" className="rounded-full">
+                                    <Avatar>
+                                        <AvatarFallback>{user?.username[0].toUpperCase() || "U"}</AvatarFallback>
+                                    </Avatar>
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end" className="w-56">
+                                <DropdownMenuItem className="py-3 cursor-pointer" onClick={() => router.push(`/u/${user?.username}`)}>
+                                    <User className="mr-2 h-4 w-4" />
+                                    <span>Profile</span>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem className="py-3 cursor-pointer" onClick={() => router.push(`/explore`)}>
+                                    <Globe className="mr-2 h-4 w-4" />Explore
+                                </DropdownMenuItem>
+                                <DropdownMenuItem className="py-3 cursor-pointer">
+                                    <Bookmark className="mr-2 h-4 w-4" />Bookmarks
+                                </DropdownMenuItem>
+                                <DropdownMenuItem className="py-3 cursor-pointer">
+                                    <BellIcon className="mr-2 h-4 w-4" />Notifications
+                                </DropdownMenuItem>
+                                <ModeToggle />
 
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem className="py-3 cursor-pointer" onClick={() => signOut()}>
-                                Signout
-                            </DropdownMenuItem>
-                            <DropdownMenuSeparator />
-                            <div className="px-2 py-3 text-sm text-muted-foreground">
-                                {user.email}
-                            </div>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem className="py-3 cursor-pointer" onClick={() => signOut()}>
+                                    Signout
+                                </DropdownMenuItem>
+                                <DropdownMenuSeparator />
+                                <div className="px-2 py-3 text-sm text-muted-foreground">
+                                    {user.email}
+                                </div>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    </div>
                     :
                     <Link href={"/login"}>
                         <Button variant={"default"} className="bg-purple-700 hover:bg-purple-600 text-white">

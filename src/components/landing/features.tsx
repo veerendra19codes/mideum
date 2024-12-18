@@ -15,7 +15,7 @@ const FeaturesData: Feature[] = [
         name: 'Easy to Use',
         description:
             'Mideum designed to be intuitive and easy to use.',
-        icon: <Sparkles size={iconSize} />,
+        icon: <Sparkles size={iconSize} className="bg-transparent" />,
     },
     {
         id: 2,

@@ -8,8 +8,11 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { Settings, Link, PlusCircle, FolderPlus } from 'lucide-react'
+import { Settings, Link, Edit } from 'lucide-react'
 import { EditProfileDialog } from '@/components/edit-profile-dialog'
+import { useToast } from "@/hooks/use-toast"
+import { WriteBlogDialog } from './write-blog-dialog'
+
 
 interface UserProps {
     name?: string,
@@ -22,6 +25,8 @@ export function ProfileHeader({ user }: { user: UserProps }) {
     const name = user?.name || "No name";
     const username = user?.username || "Unknown User";
     const bio = user?.bio || "No bio available.";
+
+    const { toast } = useToast()
 
     return (
         <header className="bg-background border-b w-full">
@@ -44,23 +49,30 @@ export function ProfileHeader({ user }: { user: UserProps }) {
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                            <DropdownMenuItem onClick={() => navigator.clipboard.writeText(window.location.href)}>
-                                <Link className="mr-2 h-4 w-4" />
+                            <DropdownMenuItem onClick={() => {
+                                navigator.clipboard.writeText(window.location.href)
+                                toast({
+                                    title: "Profile link copied to clipboard",
+
+                                })
+                            }} className="h-12 px-4 flex justify-start items-center gap-2 cursor-pointer">
+                                <Link />
                                 Copy profile link
                             </DropdownMenuItem>
 
-                            <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                            <DropdownMenuItem onSelect={(e) => e.preventDefault()} className="h-12 px-4">
+                                <Edit />
                                 <EditProfileDialog user={user} />
                             </DropdownMenuItem>
 
-                            <DropdownMenuItem>
-                                <PlusCircle className="mr-2 h-4 w-4" />
-                                Add a new post
+                            <DropdownMenuItem className="h-12 flex justify-start items-center">
+                                {/* <PlusCircle className="mr-2 h-4 w-4" /> */}
+                                <WriteBlogDialog label='Add a new post' />
                             </DropdownMenuItem>
-                            <DropdownMenuItem>
+                            {/* <DropdownMenuItem>
                                 <FolderPlus className="mr-2 h-4 w-4" />
                                 Create a new collection
-                            </DropdownMenuItem>
+                            </DropdownMenuItem> */}
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </div>

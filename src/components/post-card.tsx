@@ -10,6 +10,7 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Heart, Bookmark, Share2, MoreHorizontal, FolderPlus } from 'lucide-react'
+import { formatDistance } from "date-fns";
 
 interface PostsProps {
     id: number,
@@ -29,18 +30,18 @@ export function PostCard({ post }: { post: PostsProps }) {
     const [isLiked, setIsLiked] = useState(false)
     const [isBookmarked, setIsBookmarked] = useState(false)
 
-    function formatDateToDDMMYYYY(dateString: string): string {
-        // Parse the ISO string into a Date object
-        const date = new Date(dateString);
+    // function formatDateToDDMMYYYY(dateString: string): string {
+    //     // Parse the ISO string into a Date object
+    //     const date = new Date(dateString);
 
-        // Extract day, month, and year
-        const day = String(date.getDate()).padStart(2, '0'); // Ensure 2 digits
-        const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
-        const year = date.getFullYear();
+    //     // Extract day, month, and year
+    //     const day = String(date.getDate()).padStart(2, '0'); // Ensure 2 digits
+    //     const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+    //     const year = date.getFullYear();
 
-        // Return formatted date
-        return `${day}-${month}-${year}`;
-    }
+    //     // Return formatted date
+    //     return `${day}-${month}-${year}`;
+    // }
 
     return (
         <div className="flex border rounded-lg overflow-hidden">
@@ -52,7 +53,11 @@ export function PostCard({ post }: { post: PostsProps }) {
                         </Avatar>
                         <div>
                             <p className="font-semibold">{post?.author?.username || "username"}</p>
-                            <p className="text-sm text-muted-foreground">{formatDateToDDMMYYYY(post?.createdAt)}</p>
+                            <p className="text-sm text-muted-foreground">
+                                {formatDistance(post?.createdAt, new Date(), {
+                                    addSuffix: true,
+                                })}
+                            </p>
                         </div>
                     </div>
                     <DropdownMenu>

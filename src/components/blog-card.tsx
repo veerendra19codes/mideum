@@ -12,7 +12,8 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Badge } from "@/components/ui/badge"
-import { formatDateToDDMMYYYY } from '@/lib/helperFunctions';
+// import { formatDateToDDMMYYYY } from '@/lib/helperFunctions';
+import { formatDistance } from 'date-fns';
 
 interface BlogCardProps {
     author?: {
@@ -51,8 +52,10 @@ export function BlogCard({
                     <AvatarFallback>{author?.name[0] || "U"}</AvatarFallback>
                 </Avatar> */}
                 <div>
-                    {author && author.name && <h2 className="text-lg font-semibold">{author?.name}</h2>}
-                    <p className="text-sm text-muted-foreground">{formatDateToDDMMYYYY(createdAt || "")}</p>
+                    {author && author.name && <h2 className="text-lg font-semibold">{author?.name != null ? author.name : "blog user"}</h2>}
+                    <p className="text-sm text-muted-foreground">{formatDistance(createdAt || new Date(), new Date(), {
+                        addSuffix: true,
+                    })}</p>
                 </div>
             </CardHeader>
             <CardContent>

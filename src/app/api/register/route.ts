@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
         // await connectToDB();
 
         const { username, email, password } = await req.json();
-        console.log("new franchise:", { username, password, email });
+        // console.log("new franchise:", { username, password, email });
 
         // const exists = await User.findOne({ username });
         const exists = await prisma.mUser.findFirst({
@@ -28,14 +28,14 @@ export async function POST(req: NextRequest) {
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        const newUser = await prisma.mUser.create({
+        await prisma.mUser.create({
             data: {
                 username,
                 email,
                 password: hashedPassword,
             },
         });
-        console.log("newUser:", newUser);
+        // console.log("newUser:", newUser);
 
         return NextResponse.json({ message: "User registered successfully" }, { status: 201 });
     }

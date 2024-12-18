@@ -4,7 +4,8 @@ import "./globals.css";
 import { Providers } from "./providers";
 import Navbar from "@/components/navbar";
 import { Analytics } from "@vercel/analytics/react"
-
+import NextTopLoader from "nextjs-toploader";
+import { Toaster } from "@/components/ui/toaster"
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -34,8 +35,10 @@ export default async function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Providers>
+          <NextTopLoader />
           <Navbar />
           {children}
+          <Toaster />
           <Analytics />
         </Providers>
       </body>

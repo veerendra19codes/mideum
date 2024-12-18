@@ -5,7 +5,7 @@ import { Prisma } from "@prisma/client";
 export async function POST(req: NextRequest) {
     try {
         const filters = await req.json();
-        console.log("filters:", filters);
+        // console.log("filters:", filters);
 
         const { author, title, tags, dateFrom, dateTo, sortBy } = filters;
 
@@ -89,7 +89,7 @@ export async function POST(req: NextRequest) {
             },
         });
 
-        console.log("posts:", posts);
+        // console.log("posts:", posts);
         return NextResponse.json({
             message: "Successfully fetched posts",
             posts,

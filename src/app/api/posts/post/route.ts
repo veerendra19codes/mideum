@@ -5,7 +5,7 @@ import { prisma } from "@/lib/db";
 export async function POST(req: NextRequest) {
     try {
         const { title, content, userId } = await req.json();
-        console.log("title:", title, content, userId);
+        // console.log("title:", title, content, userId);
 
         // check if user exists
         const userExists = await prisma.mUser.findUnique({
@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
                 id: userId
             }
         })
-        console.log("userExists:", userExists);
+        // console.log("userExists:", userExists);
 
         if (!userExists) {
             return NextResponse.json({ message: "user with this id doen not exist" })
@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
                 authorId: userId
             },
         });
-        console.log("newPost:", newPost);
+        // console.log("newPost:", newPost);
 
         return NextResponse.json({ message: "successfully posted", newPost })
     } catch (error) {
