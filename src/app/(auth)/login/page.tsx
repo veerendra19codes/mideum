@@ -59,7 +59,7 @@ const Loginpage = () => {
     return (
         <div className="w-full h-screen flex flex-col justify-center items-center gap-4">
 
-            <form action="" className="flex flex-col justify-center items-center gap-4 p-8 bg-gray-800 rounded-xl" onSubmit={handleSubmit}>
+            <form action="" className="flex flex-col justify-center items-center gap-4 p-8 bg-gray-200 dark:bg-gray-800 rounded-xl" onSubmit={handleSubmit}>
                 <div className="flex flex-col gap-2 justify-center items-center mb-4">
                     <h1 className="text-2xl font-bold">
                         Login
