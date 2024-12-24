@@ -7,7 +7,7 @@ export function ProfileNavbar() {
     const [activeTab, setActiveTab] = useState('posts')
 
     return (
-        <nav className="flex space-x-1 border-b mb-8">
+        <nav className="flex space-x-1 border-b mb-4">
             <Button
                 variant={activeTab === 'posts' ? 'default' : 'ghost'}
                 onClick={() => setActiveTab('posts')}

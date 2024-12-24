@@ -53,7 +53,7 @@ export function FilterDialog({ filters, setFilters }: FilterDialogProps) {
     };
 
     return (
-        <div className="flex w-full gap-4">
+        <div className="flex w-full gap-4 justify-between">
             <Dialog>
                 <DialogTrigger asChild>
                     <Button variant="outline">Add Filters</Button>

@@ -22,30 +22,51 @@ export async function GET(req: NextRequest) {
             },
             select: {
                 id: true,
-                username: true,
                 name: true,
+                username: true,
                 email: true,
                 bio: true,
                 image: true,
                 posts: {
                     select: {
-                        author: {
-                            select: {
-                                username: true,
-                                id: true,
-                            }
-                        },
                         id: true,
+                        createdAt: true,
+                        updatedAt: true,
                         title: true,
                         content: true,
-                        createdAt: true,
+                        image: true,
+                        tags: true,
                         published: true,
                         authorId: true,
+                        author: {
+                            select: {
+                                id: true,
+                                username: true,
+                                email: true,
+                                name: true,
+                                image: true,
+                            }
+                        },
+                        likes: {
+                            select: {
+                                id: true,
+                                userId: true,
+                                postId: true,
+                            }
+                        },
+                        bookmarks: {
+                            select: {
+                                id: true,
+                                userId: true,
+                                postId: true,
+                            }
+                        }
                     },
                     orderBy: {
                         createdAt: "desc",
                     }
-                }
+                },
+
             },
 
         })

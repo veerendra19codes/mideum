@@ -1,29 +1,15 @@
 import { PostCard } from '@/components/post-card'
-
-interface PostsProps {
-    id: number,
-    createdAt: string,
-    updatedAt: string,
-    title: string,
-    content: string,
-    image: string,
-    published: boolean,
-    authorId: number
-}
+import { PostType, UserType } from '@/types'
 
 interface UserProps {
-    name?: string
-    username?: string
-    bio?: string
-    posts?: PostsProps[]
+    user: UserType | null;
 }
 
-
-export function PostList({ user }: { user: UserProps }) {
+export function PostList({ user }: UserProps) {
 
     return (
-        <div className="space-y-8">
-            {user.posts && user?.posts?.map((post) => (
+        <div className=" space-y-4 md:space-y-8">
+            {user && user.posts && user?.posts?.map((post: PostType) => (
                 <PostCard key={post.id} post={post} />
             ))}
         </div>

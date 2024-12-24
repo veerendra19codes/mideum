@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import {
@@ -11,24 +11,28 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { Heart, Bookmark, Share2, MoreHorizontal, FolderPlus } from 'lucide-react'
 import { formatDistance } from "date-fns";
+import { PostType } from '@/types'
+import { useUserContext } from '@/contexts/userContext'
+import axios from 'axios'
+import { FaBookmark, FaHeart } from 'react-icons/fa'
 
-interface PostsProps {
-    id: number,
-    createdAt: string,
-    updatedAt: string,
-    title: string,
-    content: string,
-    image: string,
-    published: boolean,
-    author?: {
-        authorId?: string,
-        username?: string,
-    }
-}
-
-export function PostCard({ post }: { post: PostsProps }) {
+export function PostCard({ post }: { post: PostType }) {
     const [isLiked, setIsLiked] = useState(false)
     const [isBookmarked, setIsBookmarked] = useState(false)
+    const [bookmarksCount, setBookmarksCount] = useState<number | undefined>(post.bookmarks?.length || 0);
+    const [likesCount, setLikesCount] = useState<number | undefined>(post.likes?.length || 0);
+    const { user } = useUserContext();
+
+    useEffect(() => {
+        if (post && user) {
+            setIsLiked(() => {
+                return post.likes.some((like) => like.userId == user.id)
+            })
+            setIsBookmarked(() => {
+                return post.bookmarks.some((bookmark) => bookmark.userId == user.id)
+            })
+        }
+    }, [post, user])
 
     // function formatDateToDDMMYYYY(dateString: string): string {
     //     // Parse the ISO string into a Date object
@@ -43,9 +47,79 @@ export function PostCard({ post }: { post: PostsProps }) {
     //     return `${day}-${month}-${year}`;
     // }
 
+    const handleLike = async () => {
+        try {
+            const res = await axios.put("/api/posts/like", {
+                postId: post.id, // ID of the post being liked
+                userId: user?.id || 0, // Replace with the actual user ID (fetch it from your auth system)
+            });
+
+            if (res.data.liked && res.data.status == 200) {
+                setIsLiked(true);
+                if (likesCount) {
+                    setLikesCount(likesCount + 1);
+                }
+                else {
+                    setLikesCount(1);
+                }
+                // Optionally, increment the likes count in the UI
+            }
+            else if (!res.data.liked && res.data.status == 200) {
+                setIsLiked(false);
+                if (likesCount) {
+                    setLikesCount(likesCount - 1);
+                }
+                else {
+                    setLikesCount(0);
+                }
+                // Optionally, increment the likes count in the UI
+            } else {
+                setIsLiked(false);
+                // Optionally, decrement the likes count in the UI
+            }
+        } catch (error) {
+            console.error("Error liking the post:", error);
+        }
+    };
+
+    const handleBookmark = async () => {
+        try {
+            const res = await axios.put("/api/posts/bookmark", {
+                postId: post.id, // ID of the post being liked
+                userId: user?.id || 0, // Replace with the actual user ID (fetch it from your auth system)
+            });
+
+            if (res.data.bookmark && res.data.status == 200) {
+                setIsBookmarked(true);
+                if (bookmarksCount) {
+                    setBookmarksCount(bookmarksCount + 1);
+                }
+                else {
+                    setBookmarksCount(1);
+                }
+                // Optionally, increment the likes count in the UI
+            }
+            else if (!res.data.bookmark && res.data.status == 200) {
+                setIsBookmarked(false);
+                if (bookmarksCount) {
+                    setBookmarksCount(bookmarksCount - 1);
+                }
+                else {
+                    setBookmarksCount(0);
+                }
+                // Optionally, increment the likes count in the UI
+            } else {
+                setIsBookmarked(false);
+                // Optionally, decrement the likes count in the UI
+            }
+        } catch (error) {
+            console.error("Error Bookmarking the post:", error);
+        }
+    };
+
     return (
         <div className="flex border rounded-lg overflow-hidden">
-            <div className="flex-1 p-6">
+            <div className="flex-1 p-2 md:p-6">
                 <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center space-x-3">
                         <Avatar>
@@ -85,20 +159,25 @@ export function PostCard({ post }: { post: PostsProps }) {
                     <Button
                         variant="ghost"
                         size="sm"
-                        onClick={() => setIsLiked(!isLiked)}
+                        onClick={handleLike}
                         className={isLiked ? 'text-red-500' : ''}
                     >
-                        <Heart className="mr-2 h-4 w-4" />
-                        Like
+                        {isLiked ? <FaHeart className="mr-2 h-4 w-4 text-red-500" />
+                            :
+                            <Heart className="mr-2 h-4 w-4" />
+                        }
+                        {post.likes.length || 0}
                     </Button>
                     <Button
                         variant="ghost"
                         size="sm"
-                        onClick={() => setIsBookmarked(!isBookmarked)}
+                        onClick={handleBookmark}
                         className={isBookmarked ? 'text-blue-500' : ''}
                     >
-                        <Bookmark className="mr-2 h-4 w-4" />
-                        Save
+                        {isBookmarked ? <FaBookmark className="mr-2 h-4 w-4 text-blue-500" /> :
+                            <Bookmark className="mr-2 h-4 w-4" />
+                        }
+                        {post.bookmarks.length || 0}
                     </Button>
                     <Button variant="ghost" size="sm">
                         <Share2 className="mr-2 h-4 w-4" />

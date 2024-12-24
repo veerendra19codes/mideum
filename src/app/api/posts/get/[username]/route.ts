@@ -12,12 +12,39 @@ export async function GET(
             where: {
                 authorId: Number(userId),
             },
-            include: {
+            select: {
+                id: true,
+                createdAt: true,
+                updatedAt: true,
+                title: true,
+                content: true,
+                image: true,
+                tags: true,
+                published: true,
+                authorId: true,
                 author: {
                     select: {
+                        id: true,
+                        name: true,
                         username: true,
+                        email: true,
+                        image: true,
                     },
                 },
+                likes: {
+                    select: {
+                        id: true,
+                        userId: true,
+                        postId: true,
+                    }
+                },
+                bookmarks: {
+                    select: {
+                        id: true,
+                        userId: true,
+                        postId: true,
+                    }
+                }
             },
             orderBy: {
                 createdAt: "desc",

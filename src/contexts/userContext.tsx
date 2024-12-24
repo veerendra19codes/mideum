@@ -1,23 +1,14 @@
 "use client";
 
+import { UserType } from "@/types";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import React, { createContext, useContext, useState, ReactNode, useEffect, useCallback } from "react";
 
-// Define the shape of the user object
-interface UserProps {
-  id?: string;
-  name?: string;
-  username?: string;
-  bio?: string;
-  image?: string;
-  email?: string;
-}
-
 // Define the context shape
 interface UserContextProps {
-  user: UserProps | null;
-  setUser: React.Dispatch<React.SetStateAction<UserProps | null>>;
+  user: UserType | null;
+  setUser: React.Dispatch<React.SetStateAction<UserType | null>>;
   fetchUserDetails: () => void;
 }
 
@@ -35,7 +26,7 @@ export const useUserContext = (): UserContextProps => {
 
 // Context provider component
 export const UserContextProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<UserProps | null>(null);
+  const [user, setUser] = useState<UserType | null>(null);
   const session = useSession();
 
   const fetchUserDetails = useCallback(async () => {

@@ -73,19 +73,39 @@ export async function POST(req: NextRequest) {
         // Fetch filtered posts
         const posts = await prisma.mPost.findMany({
             ...query,
-            include: {
+            select: {
+                id: true,
+                createdAt: true,
+                updatedAt: true,
+                title: true,
+                content: true,
+                image: true,
+                tags: true,
+                published: true,
+                authorId: true,
                 author: {
                     select: {
                         id: true,
-                        username: true,
                         name: true,
+                        username: true,
                         email: true,
-                        bio: true,
                         image: true,
                     },
                 },
-                likes: true,
-                bookmarks: true,
+                likes: {
+                    select: {
+                        id: true,
+                        userId: true,
+                        postId: true,
+                    }
+                },
+                bookmarks: {
+                    select: {
+                        id: true,
+                        userId: true,
+                        postId: true,
+                    }
+                }
             },
         });
 

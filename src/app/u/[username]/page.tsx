@@ -13,9 +13,9 @@ export default function ProfilePage() {
     return (
         <div className="min-h-screen bg-background px-4 md:px-12">
             {user && <ProfileHeader user={user || {}} />}
-            <main className="container mx-auto px-4 py-8">
+            <main className="container mx-auto md:px-4 py-8">
                 <ProfileNavbar />
-                <PostList user={user || {}} />
+                <PostList user={user} />
             </main>
         </div>
     )

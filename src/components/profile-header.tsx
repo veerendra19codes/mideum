@@ -30,22 +30,24 @@ export function ProfileHeader({ user }: { user: UserProps }) {
 
     return (
         <header className="bg-background border-b w-full">
-            <div className="container mx-auto px-4 py-8">
+            <div className="container mx-auto md:px-4 py-4 md:py-8">
                 <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-4">
-                        <Avatar className="h-24 w-24">
+                        <Avatar className="size-10 md:size-24">
                             <AvatarFallback>{username[0] || "U"}</AvatarFallback>
                         </Avatar>
                         <div>
-                            <h1 className="text-2xl font-bold">{name}</h1>
+                            <h1 className="text-md md:text-2xl font-bold">{name}</h1>
                             <p className="text-muted-foreground">{username}</p>
                         </div>
                     </div>
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button variant="outline">
-                                <Settings className="mr-2 h-4 w-4" />
-                                Settings
+                                <Settings className="md:mr-2 h-4 w-4" />
+                                <p className="hidden md:block">
+                                    Settings
+                                </p>
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
