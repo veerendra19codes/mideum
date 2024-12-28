@@ -154,7 +154,9 @@ export function BlogCard({ blog }: { blog: PostType }) {
                     </Button>
                     <Button variant="ghost" size="sm">
                         <MessageCircle className="mr-2 h-4 w-4" />
-                        {blog.comments.length || 0}
+                        {/* {blog.comments.length || 0}
+                         */}
+                        0
                     </Button>
                     <Button
                         variant="ghost"
