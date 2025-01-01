@@ -23,11 +23,11 @@ export function Hero() {
                     className="relative flex flex-col gap-4 items-center justify-center px-4 mb-32"
                 >
                     <div className="text-3xl md:text-7xl font-bold dark:text-white text-center">
-                        Read, Write and Share Stories
+                        Laugh, Learn and Leap
                     </div>
                     <div className="font-extralight text-base md:text-4xl dark:text-neutral-200 py-4">
                         Discover, learn, and experience <Highlight>
-                            stories on any topic
+                            blogs on any topic
                         </Highlight>
                     </div>
                     <Link href={"/explore"} className="bg-black dark:bg-white rounded-full w-fit text-white dark:text-black px-4 py-2">

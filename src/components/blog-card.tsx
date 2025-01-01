@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from 'react'
+import { MouseEvent, useEffect, useState } from 'react'
 // import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
@@ -18,6 +18,7 @@ import { FaHeart, FaBookmark } from "react-icons/fa";
 import axios from 'axios';
 import { useUserContext } from '@/contexts/userContext';
 import { PostType } from '@/types';
+import Link from 'next/link';
 
 export function BlogCard({ blog }: { blog: PostType }) {
     const { user } = useUserContext();
@@ -44,7 +45,8 @@ export function BlogCard({ blog }: { blog: PostType }) {
     }, [user, blog.likes, blog.bookmarks])
     // console.log("publishDate:", createdAt);
 
-    const handleLike = async () => {
+    const handleLike = async (e: MouseEvent) => {
+        e.preventDefault();
         try {
             const res = await axios.put("/api/posts/like", {
                 postId: blog.id, // ID of the post being liked
@@ -79,7 +81,8 @@ export function BlogCard({ blog }: { blog: PostType }) {
         }
     };
 
-    const handleBookmark = async () => {
+    const handleBookmark = async (e: MouseEvent) => {
+        e.preventDefault();
         try {
             const res = await axios.put("/api/posts/bookmark", {
                 postId: blog.id, // ID of the post being liked
@@ -115,80 +118,83 @@ export function BlogCard({ blog }: { blog: PostType }) {
     };
 
     if (blog.title) return (
-        <Card className="mb-6" style={{ direction: 'ltr' }}>
-            <CardHeader className="flex flex-row items-center gap-2">
-                {/* <Avatar>
+        <Link href={`/p/${blog.id}`}>
+
+            <Card className="mb-6" style={{ direction: 'ltr' }}>
+                <CardHeader className="flex flex-row items-center gap-2">
+                    {/* <Avatar>
                     <AvatarImage src={author?.avatar} alt={author?.name} />
                     <AvatarFallback>{author?.name[0] || "U"}</AvatarFallback>
-                </Avatar> */}
-                <div>
-                    {blog.author && blog.author.name && <h2 className="text-lg font-semibold">{blog.author?.name != null ? blog.author.name : "blog user"}</h2>}
-                    <p className="text-sm text-muted-foreground">{formatDistance(blog.createdAt || new Date(), new Date(), {
-                        addSuffix: true,
-                    })}</p>
-                </div>
-            </CardHeader>
-            <CardContent>
-                <h3 className="text-2xl font-bold">{blog.title}</h3>
-                <p className="text-muted-foreground line-clamp-3">{blog.content}</p>
-                <div className="flex flex-wrap gap-2">
-                    {blog.tags && blog.tags.map((tag) => (
-                        <Badge key={tag} variant="secondary">
-                            {tag}
-                        </Badge>
-                    ))}
-                </div>
-            </CardContent>
-            <CardFooter className="flex justify-between flex-wrap">
-                <div className="flex gap-4">
-                    <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={handleLike}
-                    >
-                        {isLiked ? <FaHeart className="mr-2 h-4 w-4 text-red-500" />
-                            :
-                            <Heart className="mr-2 h-4 w-4" />
-                        }
-                        {likesCount || 0}
-                    </Button>
-                    <Button variant="ghost" size="sm">
-                        <MessageCircle className="mr-2 h-4 w-4" />
-                        {/* {blog.comments.length || 0}
+                    </Avatar> */}
+                    <div>
+                        {blog.author && blog.author.name && <h2 className="text-lg font-semibold">{blog.author?.name != null ? blog.author.name : "blog user"}</h2>}
+                        <p className="text-sm text-muted-foreground">{formatDistance(blog.createdAt || new Date(), new Date(), {
+                            addSuffix: true,
+                        })}</p>
+                    </div>
+                </CardHeader>
+                <CardContent>
+                    <h3 className="text-2xl font-bold">{blog.title}</h3>
+                    <p className="text-muted-foreground line-clamp-3">{blog.content}</p>
+                    <div className="flex flex-wrap gap-2">
+                        {blog.tags && blog.tags.map((tag) => (
+                            <Badge key={tag} variant="secondary">
+                                {tag}
+                            </Badge>
+                        ))}
+                    </div>
+                </CardContent>
+                <CardFooter className="flex justify-between flex-wrap">
+                    <div className="flex gap-4">
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={handleLike} className="z-10"
+                        >
+                            {isLiked ? <FaHeart className="mr-2 h-4 w-4 text-red-500" />
+                                :
+                                <Heart className="mr-2 h-4 w-4" />
+                            }
+                            {likesCount || 0}
+                        </Button>
+                        <Button variant="ghost" size="sm">
+                            <MessageCircle className="mr-2 h-4 w-4" />
+                            {/* {blog.comments.length || 0}
                          */}
-                        0
-                    </Button>
-                    <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={handleBookmark}
-                    >
-                        {isBookmarked ? <FaBookmark className="mr-2 h-4 w-4 text-blue-500" /> :
-                            <Bookmark className="mr-2 h-4 w-4" />
-                        }
-                        {blog.bookmarks?.length || 0}
-                    </Button>
-                </div>
-                <div className="flex gap-2">
-                    {/* <Button variant="ghost" size="sm">
+                            0
+                        </Button>
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={handleBookmark}
+                        >
+                            {isBookmarked ? <FaBookmark className="mr-2 h-4 w-4 text-blue-500" /> :
+                                <Bookmark className="mr-2 h-4 w-4" />
+                            }
+                            {blog.bookmarks?.length || 0}
+                        </Button>
+                    </div>
+                    <div className="flex gap-2">
+                        {/* <Button variant="ghost" size="sm">
                         <Share2 className="h-4 w-4" />
                     </Button> */}
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="sm">
-                                <MoreHorizontal className="h-4 w-4" />
-                            </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                            <DropdownMenuItem><Share2 className="h-4 w-4" /> Share</DropdownMenuItem>
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button variant="ghost" size="sm">
+                                    <MoreHorizontal className="h-4 w-4" />
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                                <DropdownMenuItem><Share2 className="h-4 w-4" /> Share</DropdownMenuItem>
 
-                            <DropdownMenuItem>Add to collection</DropdownMenuItem>
-                            <DropdownMenuItem>Report</DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
-                </div>
-            </CardFooter>
-        </Card>
+                                <DropdownMenuItem>Add to collection</DropdownMenuItem>
+                                <DropdownMenuItem>Report</DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    </div>
+                </CardFooter>
+            </Card>
+        </Link>
     )
 
     else return <></>;

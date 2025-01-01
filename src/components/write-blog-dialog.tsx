@@ -23,7 +23,7 @@ export function WriteBlogDialog({ label }: { label: string }) {
     const [title, setTitle] = useState('')
     const [content, setContent] = useState('')
     const { user, fetchUserDetails } = useUserContext();
-    console.log("open:", isOpen);
+    // console.log("open:", isOpen);
 
     const handlePublish = async () => {
         console.log("body:", title, content, user?.id);
