@@ -22,21 +22,26 @@ export function WriteBlogDialog({ label }: { label: string }) {
     const [isOpen, setIsOpen] = useState(false)
     const [title, setTitle] = useState('')
     const [content, setContent] = useState('')
+    const [image, setImage] = useState<File | null>(null);
+
     const { user, fetchUserDetails } = useUserContext();
     // console.log("open:", isOpen);
 
     const handlePublish = async () => {
         console.log("body:", title, content, user?.id);
+        const form = new FormData();
+        if(image) form.set("file", image);
+        form.set("title", title);
+        form.set("content", content);
+        form.set("userId", user?.id.toString() || '');
+
         try {
-            const res = await axios.post(`/api/posts/post`, {
-                title,
-                content,
-                userId: user?.id,
-            })
+            const res = await axios.post(`/api/posts/post`, form)
             console.log("res:", res);
             if (res.status == 200) {
                 setTitle("");
                 setContent("");
+                setImage(null);
                 alert("published successfully");
                 fetchUserDetails();
                 setIsOpen(false);
@@ -44,6 +49,7 @@ export function WriteBlogDialog({ label }: { label: string }) {
             else {
                 setTitle("");
                 setContent("");
+                setImage(null);
                 alert("something went wrong");
                 setIsOpen(false);
             }
@@ -53,11 +59,13 @@ export function WriteBlogDialog({ label }: { label: string }) {
         }
     }
 
-    const handleSaveDraft = () => {
-        // Here you would typically save the draft to your backend or local storage
-        console.log('Saving draft:', { title, content })
-        // Optionally close the dialog or show a confirmation message
-    }
+    // const handleSaveDraft = () => {
+    //     // Here you would typically save the draft to your backend or local storage
+    //     console.log('Saving draft:', { title, content })
+    //     // Optionally close the dialog or show a confirmation message
+    // }
+
+
 
     return (
         <Dialog open={isOpen} onOpenChange={(value) => setIsOpen(value)}>
@@ -67,7 +75,7 @@ export function WriteBlogDialog({ label }: { label: string }) {
                     <span className="pl-[6px] hidden lg:block">{label}</span>
                 </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[625px] z-[100000]">
+            <DialogContent className="sm:max-w-[625px]">
                 <DialogHeader>
                     <DialogTitle>Write a new blog post</DialogTitle>
                     <DialogDescription>
@@ -88,6 +96,18 @@ export function WriteBlogDialog({ label }: { label: string }) {
                     </div>
 
                     <div className="grid grid-cols-4 items-center gap-4">
+                        <Label htmlFor="title" className="text-right">
+                            Image
+                        </Label>
+                        <Input
+                            id="file"
+                            type="file"
+                            onChange={(e) => setImage(e.target.files?.[0] || null)}
+                            className="col-span-3"
+                        />
+                    </div>
+
+                    <div className="grid grid-cols-4 items-center gap-4">
                         <Label htmlFor="content" className="text-right">
                             Content
                         </Label>
@@ -101,9 +121,9 @@ export function WriteBlogDialog({ label }: { label: string }) {
                     </div>
                 </div>
                 <DialogFooter className="sm:justify-between">
-                    <Button type="button" variant="secondary" onClick={handleSaveDraft}>
+                    {/* <Button type="button" variant="secondary" onClick={handleSaveDraft}>
                         Save as Draft
-                    </Button>
+                    </Button> */}
                     <div>
                         <Button type="button" variant="ghost" onClick={() => setIsOpen(false)} className="mr-2">
                             Cancel

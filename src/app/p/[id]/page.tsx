@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/ui/button';
 import { useUserContext } from '@/contexts/userContext';
-import { PostType } from '@/types';
+import { BookmarkType, PostType} from '@/types';
 import axios from 'axios';
 import { formatDistance } from 'date-fns';
 import { useParams } from 'next/navigation'
@@ -12,6 +12,9 @@ import { FaHeart, FaBookmark } from "react-icons/fa";
 import { toast } from '@/hooks/use-toast';
 import { Separator } from '@/components/ui/separator';
 import { Input } from '@/components/ui/input';
+import Image from 'next/image';
+import { getValidImageUrl } from '@/lib/helperFunctions';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 function Post() {
     const params = useParams();
@@ -31,39 +34,44 @@ function Post() {
             id: 0,
             email: "",
             username: "",
+            image: "",
         },
         likes: [],
         bookmarks: [],
         comments: []
 
     });
-    const [isLiked, setIsLiked] = useState<boolean>(false);
-    const [isBookmarked, setIsBookmarked] = useState<boolean>(false);
-    const [bookmarksCount, setBookmarksCount] = useState<number | undefined>(post.bookmarks?.length || 0);
-    const [likesCount, setLikesCount] = useState<number | undefined>(post.likes?.length || 0);
+    const [isLiked, setIsLiked] = useState<boolean>(post.likes.some((like) => like.userId == user?.id));
+    const [isBookmarked, setIsBookmarked] = useState<boolean>(post.bookmarks.some((bookmark) => bookmark.userId == user?.id));
+
+    const [bookmarksCount, setBookmarksCount] = useState<number>(post.bookmarks?.length || 0);
+    const [likesCount, setLikesCount] = useState<number>(post.likes?.length || 0);
+    const [commentsCount, setCommentsCount] = useState<number>(post.comments?.length || 0);
+
     const [comment, setComment] = useState<string>("");
-    const [comments, setComments] = useState<{ postId: number, id: number, comment: string, userId: number, user: { username: string, image: string } }[]>([]);
+    const [comments, setComments] = useState<{ postId: number, id: number, comment: string, userId: number, user: { username: string, image: string, id: number, email: string } }[]>([]);
+    const [imageError, setImageError] = useState<boolean>(false);
 
     useEffect(() => {
         const findPost = async () => {
             const res = await axios.get(`/api/posts/getPostById/${params.id}`);
             // console.log("res:", res); // res.data.post
             setPost(res.data.post);
+            setIsBookmarked(res.data.post.bookmarks.some((bookmark: BookmarkType) => bookmark.userId == user?.id))
         }
-
 
         if (params.id) {
             findPost();
         }
 
-    }, [params.id])
+    }, [params.id, user?.id])
 
     useEffect(() => {
         const findComments = async () => {
             const res = await axios.get(`/api/getCommentsByPostId/${post.id}`)
-
             // console.log("comments: ", res);
             setComments(res.data.comments);
+            setCommentsCount(res.data.comments.length);
         }
         if (post.id > 0) {
             findComments();
@@ -157,6 +165,7 @@ function Post() {
             const newComment = { ...res.data.newComment, user };
             setComments(prev => [...prev, newComment]);
             setComment("");
+            setCommentsCount(commentsCount+1);
         } catch (error) {
             toast({
                 title: "Error",
@@ -169,9 +178,23 @@ function Post() {
     const shareLink = `${window.location.origin}/p/${params.id}`;
 
     return (
-        <div className="w-full min-h-screen flex justify-center p-4">
+        <div className="w-full min-h-screen flex justify-center p-4 h-full">
             {post.title ?
                 <div className="md:w-1/3 flex flex-col gap-2 justify-start items-start">
+                    <div className="text-center relative flex-wrap text-ellipsis p-2 overflow-hidden size-full h-60">
+                        {!imageError && (
+                            <Image
+                                src={getValidImageUrl(post.image)}
+                                alt={post.title || 'Blog post image'}
+                                fill
+                                
+                                className="rounded-lg min-size-60 object-cover"
+                                priority={false}
+                                onError={() => setImageError(true)}
+                            />
+                        )}
+                    </div>
+
                     <h1 className="font-black text-3xl">{post.title}</h1>
 
                     <div className="flex justify-between w-full items-center">
@@ -198,9 +221,7 @@ function Post() {
 
                         <Button variant="ghost" size="sm">
                             <MessageCircle className="mr-2 h-4 w-4" />
-                            {/* {post.comments.length || 0}
-                         */}
-                            0
+                            {commentsCount || 0}
                         </Button>
 
                         <Button
@@ -227,7 +248,7 @@ function Post() {
 
                     <Separator />
 
-                    <p className="mt-4 mb-4">{post.content}</p>
+                    <p className="mt-4 mb-4 min-h-[300px]">{post.content}</p>
 
                     <Separator />
 
@@ -238,16 +259,23 @@ function Post() {
                             <Button className="bg-blue-500 hover:bg-blue-400 w-1/5 text-white hover:text-white" variant={"ghost"} onClick={handleComment} >Add</Button>
                         </div>
 
-                        <div className="w-full max-h-[200px] overflow-y-auto border p-2 border-gray-500 rounded flex flex-col gap-2">
-                            {comments.length > 0 && [...comments].reverse().map((comment) => {
+                        {comments.length > 0 && <div className="w-full max-h-[200px] overflow-y-auto border p-2 border-gray-500 rounded flex flex-col gap-2">
+                            {[...comments].reverse().map((comment) => {
                                 return (
                                     <div key={comment?.id} className="comment w-full">
-                                        <p className="text-gray-700">{comment?.user?.username}</p>
+                                        <div className="flex w-full justify-start items-center gap-2">
+                                        <Avatar>
+                                            <AvatarImage src={comment.user?.image} alt={comment.user?.username} />
+                                            <AvatarFallback>{comment.user?.username[0].toUpperCase() || "U"}</AvatarFallback>
+                                        </Avatar>
+                                        <p className="text-gray-700 dark:text-gray-300 text-bold">{comment?.user?.username}</p>
+                                        </div>
                                         <p>{comment?.comment}</p>
                                     </div>
                                 )
                             })}
                         </div>
+                            }
                     </div>
 
                 </div> :

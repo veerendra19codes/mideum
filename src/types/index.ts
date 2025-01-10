@@ -5,9 +5,9 @@ export interface UserType {
     name?: string;
     bio?: string;
     image?: string;
-    posts?: PostType[];
-    likes?: LikeType[];
-    bookmarks?: BookmarkType[];
+    posts?: PostType[] | [];
+    likes?: LikeType[] | [];
+    bookmarks?: BookmarkType[] | [];
 }
 
 export interface PostType {
@@ -54,4 +54,11 @@ export interface CommentType {
     createdAt: number,
     updatedAt: number,
     comment: string,
+    user: {
+        id: number,
+        image?: string,
+        username?: string,
+        email: string,
+        name?: string,
+    }
 }

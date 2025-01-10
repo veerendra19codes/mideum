@@ -1,8 +1,8 @@
 'use client'
 
 import Link from 'next/link'
-import { BellIcon, Bookmark, Globe, User } from 'lucide-react'
-import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+import { Globe, User } from 'lucide-react'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import {
     DropdownMenu,
@@ -37,10 +37,12 @@ export default function Navbar() {
                 {user?.username ?
                     <div className="flex gap-4 justify-center items-center">
                         <WriteBlogDialog label='write' />
+                        <ModeToggle />
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button variant="ghost" size="icon" className="rounded-full">
                                     <Avatar>
+                                        <AvatarImage src={user?.image} alt={user?.name} />
                                         <AvatarFallback>{user?.username[0].toUpperCase() || "U"}</AvatarFallback>
                                     </Avatar>
                                 </Button>
@@ -53,14 +55,12 @@ export default function Navbar() {
                                 <DropdownMenuItem className="py-3 cursor-pointer" onClick={() => router.push(`/explore`)}>
                                     <Globe className="mr-2 h-4 w-4" />Explore
                                 </DropdownMenuItem>
-                                <DropdownMenuItem className="py-3 cursor-pointer">
+                                {/* <DropdownMenuItem className="py-3 cursor-pointer">
                                     <Bookmark className="mr-2 h-4 w-4" />Bookmarks
                                 </DropdownMenuItem>
                                 <DropdownMenuItem className="py-3 cursor-pointer">
                                     <BellIcon className="mr-2 h-4 w-4" />Notifications
-                                </DropdownMenuItem>
-                                <ModeToggle />
-
+                                </DropdownMenuItem> */}
                                 <DropdownMenuSeparator />
                                 <DropdownMenuItem className="py-3 cursor-pointer" onClick={() => signOut()}>
                                     Signout
@@ -73,11 +73,14 @@ export default function Navbar() {
                         </DropdownMenu>
                     </div>
                     :
-                    <Link href={"/login"}>
-                        <Button variant={"default"} className="bg-purple-700 hover:bg-purple-600 text-white">
-                            Login
-                        </Button>
-                    </Link>
+                    <div className="flex gap-4 justify-center items-center">
+                        <ModeToggle />
+                        <Link href={"/login"}>
+                            <Button variant={"default"} className="bg-purple-700 hover:bg-purple-600 text-white">
+                                Login
+                            </Button>
+                        </Link>
+                    </div>
                 }
             </div>
         </nav>

@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import {
     DropdownMenu,
@@ -15,6 +15,8 @@ import { PostType } from '@/types'
 import { useUserContext } from '@/contexts/userContext'
 import axios from 'axios'
 import { FaBookmark, FaHeart } from 'react-icons/fa'
+import Image from 'next/image'
+import { getValidImageUrl } from '@/lib/helperFunctions'
 
 export function PostCard({ post }: { post: PostType }) {
     const [isLiked, setIsLiked] = useState(false)
@@ -22,6 +24,7 @@ export function PostCard({ post }: { post: PostType }) {
     const [bookmarksCount, setBookmarksCount] = useState<number | undefined>(post.bookmarks?.length || 0);
     const [likesCount, setLikesCount] = useState<number | undefined>(post.likes?.length || 0);
     const { user } = useUserContext();
+    const [imageError, setImageError] = useState<boolean>(false);
 
     useEffect(() => {
         if (post && user) {
@@ -33,19 +36,6 @@ export function PostCard({ post }: { post: PostType }) {
             })
         }
     }, [post, user])
-
-    // function formatDateToDDMMYYYY(dateString: string): string {
-    //     // Parse the ISO string into a Date object
-    //     const date = new Date(dateString);
-
-    //     // Extract day, month, and year
-    //     const day = String(date.getDate()).padStart(2, '0'); // Ensure 2 digits
-    //     const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
-    //     const year = date.getFullYear();
-
-    //     // Return formatted date
-    //     return `${day}-${month}-${year}`;
-    // }
 
     const handleLike = async () => {
         try {
@@ -123,6 +113,7 @@ export function PostCard({ post }: { post: PostType }) {
                 <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center space-x-3">
                         <Avatar>
+                            <AvatarImage src={post.author.image} alt={post.author.name} />
                             <AvatarFallback>{"U"}</AvatarFallback>
                         </Avatar>
                         <div>
@@ -153,8 +144,28 @@ export function PostCard({ post }: { post: PostType }) {
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </div>
-                <h2 className="text-2xl font-bold mb-2">{post.title}</h2>
-                <p className="text-muted-foreground mb-4">{post.content}</p>
+
+                <div className="flex justify-center items-start">
+                    <div className="flex flex-col justify-start items-start w-4/5">
+                        <h2 className="text-2xl font-bold mb-2">{post.title}</h2>
+                        <p className="text-muted-foreground mb-4">{post.content}</p>
+                    </div>
+
+                    <div className="w-1/5 relative flex-wrap text-ellipsis p-2 overflow-hidden size-[150px]">
+                        {!imageError && (
+                                <Image
+                                    src={getValidImageUrl(post.image)}
+                                    alt={post.title || 'Blog post image'}
+                                    fill
+                                    
+                                    className="rounded-lg size-60 object-cover"
+                                    priority={false}
+                                    onError={() => setImageError(true)}
+                                />
+                            )}
+                        </div>
+                </div>
+
                 <div className="flex items-center space-x-4">
                     <Button
                         variant="ghost"

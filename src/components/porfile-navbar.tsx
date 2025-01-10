@@ -1,16 +1,14 @@
 'use client'
 
-import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 
-export function ProfileNavbar() {
-    const [activeTab, setActiveTab] = useState('posts')
+export function ProfileNavbar({activeTab, setActiveTab}: {activeTab:string, setActiveTab: (value: string) => void}) {
 
     return (
         <nav className="flex space-x-1 border-b mb-4">
             <Button
                 variant={activeTab === 'posts' ? 'default' : 'ghost'}
-                onClick={() => setActiveTab('posts')}
+                onClick={() => setActiveTab("")}
             >
                 My Posts
             </Button>

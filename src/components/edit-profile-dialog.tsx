@@ -29,18 +29,19 @@ interface EditProfileDialogProps {
 
 export function EditProfileDialog({ user }: EditProfileDialogProps) {
     const [isOpen, setIsOpen] = useState(false)
-    const [name, setName] = useState<string | undefined>(user.name || "")
-    const [bio, setBio] = useState<string | undefined>(user.bio || "")
+    const [name, setName] = useState<string>(user.name || "")
+    const [bio, setBio] = useState<string>(user.bio || "")
+    const [image, setImage] = useState<File | null>(null);
     const { setUser } = useUserContext();
 
     const handleProfileUpdate = async () => {
         try {
-            console.log("body:", name, bio);
-            const res = await axios.put(`/api/profile/edit`, {
-                name,
-                bio,
-            }
-            )
+            // console.log("body:", name, bio);
+            const form = new FormData();
+            if(image) form.set("file", image);
+            form.set("name", name);
+            form.set("bio", bio);
+            const res = await axios.put(`/api/profile/edit`, form)
             console.log("res:", res);
             if (res.status == 200) {
                 setIsOpen(false);
@@ -91,6 +92,17 @@ export function EditProfileDialog({ user }: EditProfileDialogProps) {
                             id="bio"
                             value={bio}
                             onChange={(e) => setBio(e.target.value)}
+                            className="col-span-3"
+                        />
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                        <Label htmlFor="bio" className="text-right">
+                            Profile Image
+                        </Label>
+                        <Input
+                            id="file"
+                            type="file"
+                            onChange={(e) => setImage(e.target.files?.[0] || null)}
                             className="col-span-3"
                         />
                     </div>

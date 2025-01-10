@@ -10,3 +10,22 @@ export function formatDateToDDMMYYYY(dateString: string): string {
     // Return formatted date
     return `${day}-${month}-${year}`;
 }
+
+// Helper function to validate and format image URL
+export const getValidImageUrl = (imageUrl: string | undefined): string => {
+    if (!imageUrl) return '/images/default.jpg';
+    
+    try {
+        // Check if it's already an absolute URL
+        if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
+            new URL(imageUrl); // This will throw if invalid
+            return imageUrl;
+        }
+        
+        // Add leading slash if missing for relative URLs
+        return imageUrl.startsWith('/') ? imageUrl : `/${imageUrl}`;
+    } catch {
+        return '/images/default.jpg';
+    }
+};
+

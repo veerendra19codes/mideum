@@ -6,6 +6,12 @@ export async function GET(
     context: { params: Promise<{ userId: string }> }
 ) {
     const { userId } = await context.params;
+    if (!userId) {
+            return NextResponse.json({
+                message: "User ID is required",
+                posts: []
+            }, { status: 400 });
+        }
 
     try {
         const posts = await prisma.mPost.findMany({
@@ -61,6 +67,7 @@ export async function GET(
         console.error("error in getting all posts:", error);
         return NextResponse.json({
             message: "error in getting posts, try again later",
+            posts:[],
         });
     }
 }

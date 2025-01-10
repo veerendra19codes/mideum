@@ -1,15 +1,20 @@
 import { PostCard } from '@/components/post-card'
-import { PostType, UserType } from '@/types'
+import { PostType } from '@/types'
 
 interface UserProps {
-    user: UserType | null;
+    activeTab: string,
+    userPosts: PostType[],
+    bookmarkedPosts: PostType[],
 }
 
-export function PostList({ user }: UserProps) {
+export function PostList({ activeTab,userPosts, bookmarkedPosts  }: UserProps) {
 
     return (
         <div className=" space-y-4 md:space-y-8">
-            {user && user.posts && user?.posts?.map((post: PostType) => (
+            {activeTab == "posts"  &&  userPosts?.map((post: PostType) => (
+                <PostCard key={post.id} post={post} />
+            ))}
+            {activeTab == "bookmarks"  &&  bookmarkedPosts?.map((post: PostType) => (
                 <PostCard key={post.id} post={post} />
             ))}
         </div>

@@ -1,6 +1,6 @@
 'use client'
 
-import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import {
     DropdownMenu,
@@ -18,6 +18,7 @@ interface UserProps {
     name?: string,
     username?: string,
     bio?: string,
+    image?: string | null,
 }
 
 export function ProfileHeader({ user }: { user: UserProps }) {
@@ -25,6 +26,7 @@ export function ProfileHeader({ user }: { user: UserProps }) {
     const name = user?.name || "No name";
     const username = user?.username || "Unknown User";
     const bio = user?.bio || "No bio available.";
+    const image = user?.image || "";
 
     const { toast } = useToast()
 
@@ -34,6 +36,7 @@ export function ProfileHeader({ user }: { user: UserProps }) {
                 <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-4">
                         <Avatar className="size-10 md:size-24">
+                            <AvatarImage src={image} alt={name} />
                             <AvatarFallback>{username[0] || "U"}</AvatarFallback>
                         </Avatar>
                         <div>
